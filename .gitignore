@@ -1,0 +1,4 @@
+*.elf
+*.z64
+.vscode
+build/
