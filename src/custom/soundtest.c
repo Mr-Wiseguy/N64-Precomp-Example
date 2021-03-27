@@ -1,55 +1,17 @@
+#include <ultra64.h>
+#include <mus/libmus.h>
 #include <types.h>
 
-/* Buttons */
-
-#define CONT_A      0x8000
-#define CONT_B      0x4000
-#define CONT_G	    0x2000
-#define CONT_START  0x1000
-#define CONT_UP     0x0800
-#define CONT_DOWN   0x0400
-#define CONT_LEFT   0x0200
-#define CONT_RIGHT  0x0100
-#define CONT_L      0x0020
-#define CONT_R      0x0010
-#define CONT_E      0x0008
-#define CONT_D      0x0004
-#define CONT_C      0x0002
-#define CONT_F      0x0001
-
-/* Nintendo's official button names */
-
-#define A_BUTTON	CONT_A
-#define B_BUTTON	CONT_B
-#define L_TRIG		CONT_L
-#define R_TRIG		CONT_R
-#define Z_TRIG		CONT_G
-#define START_BUTTON	CONT_START
-#define U_JPAD		CONT_UP
-#define L_JPAD		CONT_LEFT
-#define R_JPAD		CONT_RIGHT
-#define D_JPAD		CONT_DOWN
-#define U_CBUTTONS	CONT_E
-#define L_CBUTTONS	CONT_C
-#define R_CBUTTONS	CONT_F
-#define D_CBUTTONS	CONT_D
-
-struct ControllerData {
-    /* 0x00 */ f32 x;
-    /* 0x04 */ f32 y;
-    /* 0x08 */ f32 vec3f_magnitude;
-    /* 0x0C */ s16 buttonHeld;
-    /* 0x0E */ s16 buttonPressed;
-    /* 0x10 */ s16 buttonReleased;
-};
+void drawSmallString(Gfx **dl, int x, int y, const char* string);
+void drawSmallStringCol(Gfx **dl, int x, int y, const char* string, unsigned char r, unsigned char g, unsigned char b);
 
 extern struct ControllerData gControllerData;
+extern struct GfxContext D_800A5DA8;
 
-int play_sound(u32 number, s32 arg1, s32 volume, s32 pan);
-int MusHandleStop(int handle, int speed);
+musHandle play_sound(u32 number, s32 arg1, s32 volume, s32 pan);
 
 s32 sound = 0x0D;
-int handle = 0;
+musHandle handle = 0;
 
 void soundtest()
 {
@@ -72,4 +34,44 @@ void soundtest()
     {
         MusHandleStop(handle, 0);
     }
+}
+
+s32 hex_char_from_nibble(s32 val)
+{
+    if (val >= 0x0A)
+    {
+        return val + ('A' - 0x0A);
+    }
+    else
+    {
+        return val + '0';
+    }
+}
+
+void schedule_gfx_task();
+
+void soundtest_draw()
+{
+    Gfx *dlHead = D_800A5DA8.dlHead;
+    char text[9];
+    text[0] = 'S';
+    text[1] = 'o';
+    text[2] = 'u';
+    text[3] = 'n';
+    text[4] = 'd';
+    text[5] = ':';
+    text[6] = hex_char_from_nibble((sound >> 4) & 0xF);
+    text[7] = hex_char_from_nibble((sound >> 0) & 0xF);
+    text[8] = '\0'; 
+    
+    gDPSetCycleType(dlHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(dlHead++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
+    gDPSetTexturePersp(dlHead++, G_TP_NONE);
+    gDPSetTextureFilter(dlHead++, G_TF_POINT);
+    gDPSetTextureLUT(dlHead++, G_TT_NONE);
+    drawSmallStringCol(&dlHead, 100, 30, text, 255, 255, 255);
+
+    D_800A5DA8.dlHead = dlHead;
+
+    schedule_gfx_task();
 }

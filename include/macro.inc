@@ -54,3 +54,13 @@
     j      \old_func
      addiu $sp, $sp, 0x28
 .endm
+
+# TODO does not work?
+.macro .helper_call_no_args_no_saves new_func old_func
+    addiu  $sp, $sp, -0x18
+    jal    \new_func
+     sw     $ra, 0x10($sp)
+    lw     $ra, 0x10($sp)
+    j      \old_func
+     addiu $sp, $sp, 0x18
+.endm

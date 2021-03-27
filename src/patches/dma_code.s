@@ -1,4 +1,5 @@
 #include <macro.inc>
+#include <bootfont.h>
 .set noat
 .set noreorder
 .section .text

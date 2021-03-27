@@ -24,7 +24,7 @@ Z64_IN := $(BUILD_DIR)/NSUE_in.z64
 Z64_IN_OBJ := $(Z64_IN:.z64=.o)
 
 CFLAGS      := -c -mabi=32 -ffreestanding -mfix4300 -G 0 -fno-zero-initialized-in-bss -Wall -Wextra -Wpedantic
-CPPFLAGS    := -Iinclude
+CPPFLAGS    := -Iinclude -I../rrow/include -I../rrow/include/2.0I -DF3DEX_GBI_2 -D_LANGUAGE_C
 OPTFLAGS    := -Os
 ASFLAGS     := -c -x assembler-with-cpp -mabi=32 -ffreestanding -mfix4300 -G 0 -O -Iinclude
 LD_SCRIPT   := NSUE.ld

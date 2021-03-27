@@ -52,8 +52,11 @@ SECTIONS
     BEGIN_SEG(custom, .)
     {
         BUILD_DIR/src/custom/soundtest_helper.o(.text);
+        BUILD_DIR/src/custom/soundtest_draw_helper.o(.text);
         BUILD_DIR/src/custom/soundtest.o(.text);
-        BUILD_DIR/src/custom/soundtest.o(.data);
+        BUILD_DIR/src/custom/drawing.o(.text);
+        BUILD_DIR/src/custom/soundtest.o(.*data*);
+        BUILD_DIR/src/custom/drawing.o(.*data*);
     }
     END_SEG(custom)
 
@@ -67,6 +70,12 @@ SECTIONS
     
     /* Replace a call so that soundtest_helper is called instead */
     JAL_HOOK(codeseg2, func_8005AAE0, 44, soundtest_helper, soundtest_hook)
+    
+    /* Replace a call so that soundtest_helper is called instead */
+    JAL_HOOK(codeseg2, func_80046B40, 0x148, soundtest_draw, schedule_gfx_hook_1)
+    
+    /* Replace a call so that soundtest_helper is called instead */
+    JAL_HOOK(codeseg2, func_8007F22C, 0x100, soundtest_draw, schedule_gfx_hook_2)
 
     ROM_PATCH(0x000000)
     {
