@@ -6,7 +6,7 @@ void drawSmallString(Gfx **dl, int x, int y, const char* string);
 void drawSmallStringCol(Gfx **dl, int x, int y, const char* string, unsigned char r, unsigned char g, unsigned char b);
 
 extern struct ControllerData gControllerData;
-extern struct GfxContext D_800A5DA8;
+extern struct GfxContext gGfxContext;
 
 musHandle play_sound(u32 number, s32 arg1, s32 volume, s32 pan);
 
@@ -52,7 +52,7 @@ void schedule_gfx_task();
 
 void soundtest_draw()
 {
-    Gfx *dlHead = D_800A5DA8.dlHead;
+    Gfx *dlHead = gGfxContext.dlHead;
     char text[9];
     text[0] = 'S';
     text[1] = 'o';
@@ -71,7 +71,7 @@ void soundtest_draw()
     gDPSetTextureLUT(dlHead++, G_TT_NONE);
     drawSmallStringCol(&dlHead, 100, 30, text, 255, 255, 255);
 
-    D_800A5DA8.dlHead = dlHead;
+    gGfxContext.dlHead = dlHead;
 
     schedule_gfx_task();
 }
