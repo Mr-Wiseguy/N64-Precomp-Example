@@ -52,7 +52,6 @@ SECTIONS
     BEGIN_SEG(custom, .)
     {
         BUILD_DIR/src/custom/soundtest_helper.o(.text);
-        BUILD_DIR/src/custom/soundtest_draw_helper.o(.text);
         BUILD_DIR/src/custom/soundtest.o(.text);
         BUILD_DIR/src/custom/drawing.o(.text);
         BUILD_DIR/src/custom/soundtest.o(.*data*);
