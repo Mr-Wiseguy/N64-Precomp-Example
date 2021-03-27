@@ -1,3 +1,6 @@
+// This file originally from https://github.com/danbolt/n64-jam-1 and is licensed under the MPL-2.0 License
+// See the original repo for more details.
+
 #include <ultra64.h>
 
 #define TEX_ASCII_START 0
